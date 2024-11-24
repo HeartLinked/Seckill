@@ -2,7 +2,9 @@ package com.example.seckill.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "t_user")
 public class User {
