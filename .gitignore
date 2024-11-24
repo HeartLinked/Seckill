@@ -1,0 +1,17 @@
+# 忽略 macOS 系统文件
+.DS_Store
+frontend/.DS_Store
+backend/.DS_Store
+
+# 忽略 IDE 配置文件（以 IntelliJ IDEA 为例）
+backend/.idea/
+
+# 忽略 Node.js 依赖文件
+frontend/node_modules/
+
+# 忽略其他不需要跟踪的文件
+backend/HELP.md
+backend/target/
+backend/mvnw
+backend/mvnw.cmd
+
