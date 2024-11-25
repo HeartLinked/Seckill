@@ -6,10 +6,15 @@ import com.example.seckill.service.impl.UserServiceImpl;
 import com.example.seckill.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.seckill.entity.LoginRequest;
+import com.example.seckill.util.JwtUtil;
 import lombok.Data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -26,27 +31,49 @@ public class UserController {
             logger.debug("user.getPassword() = " + user.getPassword());
             String decryptedPassword = RSAUtil.decrypt(user.getPassword());
             user.setPassword(decryptedPassword);
+
+            // 执行注册逻辑，获取注册后的用户信息
             User registeredUser = userService.register(user);
             logger.info("User registered: " + registeredUser + " successfully");
-            return new Response(200, "注册成功", registeredUser);
+
+            // 创建数据 Map 并添加注册用户信息
+            Map<String, Object> data = new HashMap<>();
+            data.put("user", registeredUser);
+
+            // 返回成功响应
+            return new Response(200, "注册成功", data);
         } catch (Exception e) {
+            // 返回失败响应
             return new Response(400, e.getMessage(), null);
         }
     }
 
-}
+    @PostMapping("/login")
+    public Response login(@RequestBody LoginRequest loginRequest) {
+        try {
+            // 解密密码
+            String decryptedPassword = RSAUtil.decrypt(loginRequest.getPassword());
 
-// 响应封装类
-@Data
-class Response {
-    private int code;
-    private String message;
-    private Object data;
+            logger.info("loginRequest.getUsername() = " + loginRequest.getUsername());
+            // 执行登录逻辑，获取用户信息
+            User user = userService.login(loginRequest.getUsername(), decryptedPassword);
 
-    public Response(int code, String message, Object data) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
+            // 生成 Token
+            String token = JwtUtil.generateToken(user);
+
+            // 创建数据 Map 并添加 token 和 user
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", token);
+            data.put("user", user);
+
+            // 返回成功响应
+            return new Response(200, "登录成功", data);
+        } catch (Exception e) {
+            // 返回失败响应
+            return new Response(400, e.getMessage(), null);
+        }
     }
 
+
 }
+
