@@ -113,6 +113,8 @@ const handleSubmit = async () => {
       mobile: formState.value.mobile,
       password: encryptedPassword
     }
+    console.log(encryptedPassword);
+
 
     // 发送加密后的数据到后端
     const response = await axios.post('/api/register', submitData)
