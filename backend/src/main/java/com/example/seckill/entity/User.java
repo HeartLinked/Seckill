@@ -32,6 +32,4 @@ public class User {
     private Date lastLoginDate;
 
     private Integer loginCount;
-
-    // Getter and Setter methods
 }
