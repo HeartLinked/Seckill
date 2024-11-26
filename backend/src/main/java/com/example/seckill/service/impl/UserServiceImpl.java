@@ -59,12 +59,16 @@ public class UserServiceImpl implements UserService {
         logger.info("username = " + username + ", password = " + password);
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            if(userRepository.findByEmail(username) != null) {
+                user = userRepository.findByEmail(username);
+            } else if(userRepository.findByMobile(username) != null) {
+                user = userRepository.findByMobile(username);
+            } else throw new RuntimeException("用户不存在");
         }
         // 验证密码
         String encryptedPassword = PasswordUtil.encryptPassword(password, user.getSalt());
-        logger.info("Salt: " + user.getSalt() + ", EncryptedPassword: " + encryptedPassword);
-        logger.info("User's password in mysql: " + user.getPassword());
+//        logger.info("Salt: " + user.getSalt() + ", EncryptedPassword: " + encryptedPassword);
+//        logger.info("User's password in mysql: " + user.getPassword());
         if (!encoder.matches(password + user.getSalt(), encryptedPassword)) {
             throw new RuntimeException("密码错误");
         }

@@ -13,11 +13,37 @@ import './style.css'
 axios.defaults.baseURL = 'http://localhost:8080'
 axios.defaults.timeout = 5000 // 可选，设置请求超时时间（单位：毫秒）
 
+// 设置请求拦截器
+axios.interceptors.request.use(
+    config => {
+        // 优先从 sessionStorage 获取 token，因为它通常用于短期会话
+        let token = sessionStorage.getItem('authToken');
+
+        // 如果没有找到，尝试从 localStorage 获取
+        if (!token) {
+            console.log("no token!")
+            token = localStorage.getItem('authToken');
+        }
+
+        console.log('Token being sent with request:', token);
+
+        // 如果有 token，设置请求头
+        if (token) {
+            config.headers['Authorization'] = 'Bearer ' + token;
+        }
+
+        return config;
+    },
+    error => {
+        // 请求出错时的处理
+        return Promise.reject(error);
+    }
+);
+
 const app = createApp(App)
 
 // 全局配置 Axios
 app.config.globalProperties.$axios = axios
-
 
 // 配置 vue-lazyload 插件
 app.use(VueLazyload, {
