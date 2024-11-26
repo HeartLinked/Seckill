@@ -66,6 +66,7 @@ public class UserController {
             data.put("token", token);
             data.put("user", user);
 
+            logger.info("用户登录：{}", loginRequest.getUsername());
             // 返回成功响应
             return new Response(200, "登录成功", data);
         } catch (Exception e) {
