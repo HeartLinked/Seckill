@@ -61,30 +61,35 @@ const handleSubmit = async () => {
 
     // 登录请求
     const response = await axios.post('/api/login', {
-      identifier: formState.value.identifier,
+      username: formState.value.identifier,
       password: encryptedPassword
     })
 
-    if (response.status === 200) {
+    // 检查 response.data.code 而不是 response.status
+    if (response.data.code === 200) {
+      const { token, user } = response.data.data
+
       // 更新 AuthStore
-      authStore.user = response.data.user
+      authStore.user = user
       authStore.isAuthenticated = true
 
       // 处理“记住我”功能
       if (rememberMe.value) {
         localStorage.setItem('rememberedUsername', formState.value.identifier)
-        localStorage.setItem('authToken', response.data.token)
+        localStorage.setItem('authToken', token)
       } else {
         localStorage.removeItem('rememberedUsername') // 未选中时移除
-        sessionStorage.setItem('authToken', response.data.token)
+        sessionStorage.setItem('authToken', token)
       }
 
       message.success('登录成功！')
       await router.push('/products')
     } else {
-      message.error('登录失败，请检查您的信息')
+      // 使用后端返回的错误信息
+      message.error(response.data.message || '登录失败，请检查您的信息')
     }
-  } catch (error: any) {
+  } catch (error) {
+    // 处理错误响应
     const errorMessage =
         error.response?.data?.message ||
         (error instanceof Error ? error.message : '登录失败：未知错误')
@@ -93,6 +98,7 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
+
 
 const rules = {
   identifier: [

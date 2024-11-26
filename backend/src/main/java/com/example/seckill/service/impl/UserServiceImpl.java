@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+import static com.example.seckill.util.PasswordUtil.encoder;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -44,6 +46,10 @@ public class UserServiceImpl implements UserService {
         // 设置注册日期
         user.setRegisterDate(new Date());
 
+        if (user.getLoginCount() == null) {
+            user.setLoginCount(0); // 初始值为 0
+        }
+
         // 保存用户
         return userRepository.save(user);
     }
@@ -55,9 +61,11 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-        // 验证密码 TODO：fix 加密问题
+        // 验证密码
         String encryptedPassword = PasswordUtil.encryptPassword(password, user.getSalt());
-        if (!encryptedPassword.equals(user.getPassword())) {
+        logger.info("Salt: " + user.getSalt() + ", EncryptedPassword: " + encryptedPassword);
+        logger.info("User's password in mysql: " + user.getPassword());
+        if (!encoder.matches(password + user.getSalt(), encryptedPassword)) {
             throw new RuntimeException("密码错误");
         }
         // 更新最后登录时间和登录次数

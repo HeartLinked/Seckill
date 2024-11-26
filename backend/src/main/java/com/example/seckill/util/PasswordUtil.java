@@ -1,12 +1,16 @@
 package com.example.seckill.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.security.SecureRandom;
 
 public class PasswordUtil {
 
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private static final Logger logger = LoggerFactory.getLogger(PasswordUtil.class);
+
+    public static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     // 生成随机盐值
     public static String generateSalt() {
@@ -28,6 +32,7 @@ public class PasswordUtil {
     // 加密密码
     public static String encryptPassword(String password, String salt) {
         String saltedPassword = password + salt;
+        logger.info("SaltedPassword: " + saltedPassword);
         return encoder.encode(saltedPassword);
     }
 }
