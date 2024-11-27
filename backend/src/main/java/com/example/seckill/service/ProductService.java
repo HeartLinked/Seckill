@@ -7,5 +7,6 @@ import java.math.BigDecimal;
 
 public interface ProductService {
     Page<Product> findProducts(int page, int size, String keyword, Long categoryId, BigDecimal priceMin, BigDecimal priceMax);
+    void addProduct();
     // 其他方法
 }

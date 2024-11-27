@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,12 +28,15 @@ public class ProductServiceImpl implements ProductService {
             List<Predicate> predicates = new ArrayList<>();
 
             if (keyword != null && !keyword.isEmpty()) {
-                predicates.add(cb.like(root.get("name"), "%" + keyword + "%"));
+                Predicate namePredicate = cb.like(root.get("name"), "%" + keyword + "%");
+                Predicate descriptionPredicate = cb.like(root.get("description"), "%" + keyword + "%");
+                predicates.add(cb.or(namePredicate, descriptionPredicate));
             }
-            // 如果有类别关联，则添加类别条件
-            // if (categoryId != null) {
-            //     predicates.add(cb.equal(root.get("category").get("id"), categoryId));
-            // }
+
+            if (categoryId != null) {
+                predicates.add(cb.equal(root.get("category"), categoryId));
+            }
+
             if (priceMin != null) {
                 predicates.add(cb.ge(root.get("price"), priceMin));
             }
@@ -44,5 +48,20 @@ public class ProductServiceImpl implements ProductService {
         };
 
         return productRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public void addProduct() {
+        Product product = new Product();
+        product.setName("Premium Headphones");
+        product.setPrice(BigDecimal.valueOf(299.99));
+        product.setDescription("A Headphone.");
+        product.setStock(100);
+        product.setCategory("Electronics");
+        product.setBrand("SoundMax");
+        product.setSales(120);
+        product.setImages(Arrays.asList("https://picsum.photos/id/1/800/600", "https://picsum.photos/id/2/800/600"));
+        productRepository.save(product);
+
     }
 }

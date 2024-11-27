@@ -27,7 +27,7 @@ const product = ref(productStore.getProduct(Number(route.params.id)))
         </div>
         <div>
           <h1 class="text-3xl font-bold mb-4">{{ product.name }}</h1>
-          <p class="text-2xl text-indigo-600 mb-4">${{ product.price.toFixed(2) }}</p>
+          <p class="text-2xl text-indigo-600 mb-4">{{ product.price.toFixed(2) }} 元</p>
           <p class="text-gray-600 mb-6">{{ product.description }}</p>
           <div class="mb-6">
             <span class="font-semibold">Stock:</span>

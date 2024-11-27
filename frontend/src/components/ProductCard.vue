@@ -23,8 +23,8 @@ defineProps<{
     <a-card-meta :title="product.name">
       <template #description>
         <div class="space-y-2">
-          <div class="text-lg font-semibold text-primary">${{ product.price.toFixed(2) }}</div>
-          <div class="text-gray-500 text-sm">{{ product.sales }} sold</div>
+          <div class="text-lg font-semibold text-primary">{{ product.price.toFixed(2) }} 元</div>
+          <div class="text-gray-500 text-sm">已售 {{ product.sales }} </div>
         </div>
       </template>
     </a-card-meta>

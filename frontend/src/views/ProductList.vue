@@ -51,7 +51,7 @@ const handleFiltersChange = (newFilters: any) => {
 
 onMounted(async () => {
   // 从后端加载数据
-  // await productStore.fetchProducts()
+  await productStore.fetchProducts()
 
   // 如果路由中存在搜索条件，更新搜索查询
   if (route.query.search) {
