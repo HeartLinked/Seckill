@@ -89,11 +89,7 @@ const handleSubmit = async () => {
       message.error(response.data.message || '登录失败，请检查您的信息')
     }
   } catch (error) {
-    // 处理错误响应
-    const errorMessage =
-        error.response?.data?.message ||
-        (error instanceof Error ? error.message : '登录失败：未知错误')
-    message.error(errorMessage)
+      message.error('登录失败：未知错误')
   } finally {
     loading.value = false
   }

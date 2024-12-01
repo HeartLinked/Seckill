@@ -53,12 +53,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProduct() {
         Product product = new Product();
-        product.setName("Premium Headphones");
-        product.setPrice(BigDecimal.valueOf(299.99));
-        product.setDescription("A Headphone.");
+        product.setName("Xiaomi 15 pro");
+        product.setPrice(BigDecimal.valueOf(500));
+        product.setDescription("A mobile phone with high performance");
         product.setStock(100);
-        product.setCategory("Electronics");
-        product.setBrand("SoundMax");
+        product.setCategory("Mobile Phone");
+        product.setBrand("Xiaomi");
         product.setSales(120);
         product.setImages(Arrays.asList("https://picsum.photos/id/1/800/600", "https://picsum.photos/id/2/800/600"));
         productRepository.save(product);
