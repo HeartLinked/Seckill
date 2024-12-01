@@ -1,0 +1,45 @@
+
+services:
+  backend:
+    image: seckill-backend:latest
+    container_name: seckill-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/seckill?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=mydoc020907+
+    networks:
+      - seckill-network
+
+  frontend:
+    image: seckill-frontend:latest
+    container_name: seckill-frontend
+    restart: always
+    ports:
+      - "80:3000"  # 将宿主机的 80 端口映射到容器的 3000 端口
+    networks:
+      - seckill-network
+
+  db:
+    image: mysql:8
+    container_name: seckill-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=mydoc020907+
+      - MYSQL_DATABASE=seckill
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - seckill-network
+
+volumes:
+  db_data:
+
+networks:
+  seckill-network:

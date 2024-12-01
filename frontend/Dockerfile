@@ -1,4 +1,3 @@
-# 使用 Node.js 18 LTS 镜像作为基础镜像
 FROM node:21-alpine AS build-stage
 
 # 设置工作目录
