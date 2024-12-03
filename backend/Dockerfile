@@ -1,5 +1,5 @@
 # 使用 OpenJDK 18 官方镜像
-FROM openjdk:18
+FROM openjdk:17
 
 # 设置时区（避免 apt-get）
 ENV TZ=Asia/Shanghai

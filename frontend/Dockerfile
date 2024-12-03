@@ -1,4 +1,4 @@
-FROM node:21-alpine AS build-stage
+FROM node:18-alpine AS build-stage
 
 # 设置工作目录
 WORKDIR /app
@@ -6,8 +6,11 @@ WORKDIR /app
 # 将 package.json 和 package-lock.json 复制到容器中
 COPY package*.json ./
 
+RUN npm config set registry https://registry.npmmirror.com
+
 # 安装项目依赖
-RUN npm install
+RUN npm install --verbose
+
 
 # 将应用代码复制到容器中
 COPY . .
